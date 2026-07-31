@@ -1,0 +1,4 @@
+forge-std/=lib/forge-std/src/
+@openzeppelin/=lib/openzeppelin-contracts/
+@flarenetwork/=lib/flare-periphery-contracts/
+flare-vtpm-attestation/=lib/flare-vtpm-attestation/contracts/

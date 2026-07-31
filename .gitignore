@@ -1,0 +1,44 @@
+# Node
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# Foundry
+cache/
+out/
+broadcast/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Env
+.env
+.env.local
+.env.*.local
+deployments.json
+broadcast/
+
+# Logs
+*.log
+
+# Foundry library deps (clone via `forge install` or git submodules)
+contracts/lib/
+
+# Foundry local artifacts
+contracts/broadcast/
+contracts/cache/
+contracts/out/
+contracts/deployments.json

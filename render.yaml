@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: whisper-frontend
+    runtime: docker
+    plan: free
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: .
+    rootDir: .
+    envVars:
+      - key: TEE_API_URL
+        value: http://whisper-tee:8787
+      - key: XRPL_API_URL
+        value: http://whisper-xrpl:8788
+      - key: NEXT_PUBLIC_TEE_CHAIN
+        value: coston2
+      - key: NEXT_PUBLIC_FLARE_RPC
+        value: https://coston2-api.flare.network/ext/C/rpc
+    healthCheckPath: /api/health
+  - type: web
+    name: whisper-tee
+    runtime: docker
+    plan: free
+    dockerfilePath: ./tee/Dockerfile
+    dockerContext: .
+    rootDir: .
+    envVars:
+      # Demo defaults — the TEE runs in mock-mode when addresses are unset.
+      # After the contracts are deployed to Coston2, fill these in the
+      # Render dashboard for live mode.
+      - key: COSTON2_RPC
+        value: https://coston2-api.flare.network/ext/C/rpc
+      - key: TEE_SK
+        value: "0x11223344556677889900aabbccddeeff11223344556677889900aabbccddeeff"
+      - key: TEE_ID
+        value: "0x2222222222222222222222222222222222222222222222222222222222222222"
+      - key: TEE_MEASUREMENT
+        value: "0xbb1043ba0997b5258b4096d8427186f6bf5f6e85c640dfc98b4986ed2565eb0a"
+    healthCheckPath: /health
+  - type: web
+    name: whisper-xrpl
+    runtime: docker
+    plan: free
+    dockerfilePath: ./xrpl-relay/Dockerfile
+    dockerContext: .
+    rootDir: .
+    envVars:
+      - key: XRPL_WSS
+        value: wss://s.altnet.rippletest.net:51233/
+      - key: TEE_INTERNAL_URL
+        value: http://whisper-tee:8787
+      - key: PORT
+        value: "8788"
+    healthCheckPath: /health
