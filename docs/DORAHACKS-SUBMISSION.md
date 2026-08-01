@@ -21,11 +21,11 @@
 | WhisperVTPMVerifier | `0x9FF9b136A7321EDDA152706df4458d69E7C9F3d9` | [View](https://coston2-explorer.flare.network/address/0x9FF9b136A7321EDDA152706df4458d69E7C9F3d9) |
 | MockFXRP | `0x4c765bac23F792b3954fEF6A8E22fb87634cEdCa` | [View](https://coston2-explorer.flare.network/address/0x4c765bac23F792b3954fEF6A8E22fb87634cEdCa) |
 
-**Live on-chain proof (test transactions, fresh as of submission):**
-- Bid order submitted: `0x2f3fe330aaa0955ab5584a243e81422dcfe6d0f5d5348659461a22e77d105f91` — [explorer](https://coston2-explorer.flare.network/tx/0x2f3fe330aaa0955ab5584a243e81422dcfe6d0f5d5348659461a22e77d105f91)
-- Ask order submitted: `0x69d032ede1868a7824f4e7482cad02f5d1b34603eb1e7dcfcd75fb7985ce6313` — [explorer](https://coston2-explorer.flare.network/tx/0x69d032ede1868a7824f4e7482cad02f5d1b34603eb1e7dcfcd75fb7985ce6313)
-- **Match attested (TEE-signed, verified on-chain):** `0xf1eedc7c02f8b2c90dbf151f99ca35a569a4fad3a3aa71b1c2d9cbb336f38c06` — [explorer](https://coston2-explorer.flare.network/tx/0xf1eedc7c02f8b2c90dbf151f99ca35a569a4fad3a3aa71b1c2d9cbb336f38c06)
-- Match details: bid `0x78cf6651...`, ask `0xb30f9ec7...`, 1,000 XRP @ $2.50, 2,500 mFXRP escrow
+**Live on-chain proof (transactions from the live demo URL, fresh as of submission):**
+- Bid order submitted via live URL: `0xfea6768591bc5f742a3d409fc65762896cc09bb1c02fb775e4af864c58eab8c9` — [explorer](https://coston2-explorer.flare.network/tx/0xfea6768591bc5f742a3d409fc65762896cc09bb1c02fb775e4af864c58eab8c9)
+- Ask order submitted via live URL: `0xa456752d54d34727e6524448a99afc057fcbbfbd19db9b25a88b3649740d23be` — [explorer](https://coston2-explorer.flare.network/tx/0xa456752d54d34727e6524448a99afc057fcbbfbd19db9b25a88b3649740d23be)
+- **Match attested (TEE-signed, recovered on-chain to registered pubkey):** `0x7707fcae316b63e94f50c37d45c0a19b86c6a436a05cf52e34e45737771a412c` — [explorer](https://coston2-explorer.flare.network/tx/0x7707fcae316b63e94f50c37d45c0a19b86c6a436a05cf52e34e45737771a412c)
+- Match details: bid `0xdd93c94e...`, ask `0xc4932ce7...`, 1,000 XRP @ $2.50, 2,500 mFXRP escrow, 0 bps FTSO drift
 
 ## What Whisper is
 
@@ -82,6 +82,7 @@ Whisper is a **dark pool for FXRP↔XRP** where the matching engine runs inside 
 
 ## What's verified live
 
+- ✅ Live demo URL serves in **live mode** — every submit + match is a real Coston2 transaction (verified via `/api/tee/status` returning `live_mode: true`)
 - ✅ 4 contracts deployed to Coston2 mainnet (real, verified via `eth_getCode`)
 - ✅ TEE registered on-chain with measurement `0xbb1043ba...eb0a`
 - ✅ Bid submission on-chain: real tx with OrderSubmitted event
