@@ -351,3 +351,5 @@ export const embeddedTee = {
   TEE_ID,
   isLive: () => !!(VAULT_ADDRESS && TEE_VERIFIER_ADDRESS && FXRP_ADDRESS),
 };
+
+// Build trigger: Sat Aug  1 14:44:47 UTC 2026
