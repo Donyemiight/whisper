@@ -104,6 +104,11 @@ async function handleEmbedded(path: string[], req: NextRequest): Promise<Respons
             body.expiry_unix,
             body.xrpl_address || "",
           );
+          // Update the in-memory order with the on-chain orderId
+          if (onchain.orderId) {
+            out.order_id = onchain.orderId;
+            (embeddedTee as any).updateOrderId?.(out.commitment, onchain.orderId);
+          }
         }
         return NextResponse.json({ ok: true, ...out, ...body, onchain });
       } else {
@@ -119,6 +124,10 @@ async function handleEmbedded(path: string[], req: NextRequest): Promise<Respons
             body.expiry_unix,
             body.flare_address || "",
           );
+          if (onchain.orderId) {
+            out.order_id = onchain.orderId;
+            (embeddedTee as any).updateOrderId?.(out.commitment, onchain.orderId);
+          }
         }
         return NextResponse.json({ ok: true, ...out, ...body, onchain });
       }

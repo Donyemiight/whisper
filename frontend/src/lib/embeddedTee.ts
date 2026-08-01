@@ -298,7 +298,22 @@ async function submitOnchain(
       expiryUnix,
     );
     const receipt = await tx.wait();
-    return { onchain: true, txHash: receipt?.hash, orderId: undefined };
+    // Extract the real on-chain orderId from the OrderSubmitted event
+    let onchainOrderId: string | undefined = undefined;
+    if (receipt && receipt.logs) {
+      for (const log of receipt.logs) {
+        try {
+          const parsed = vaultContract!.interface.parseLog(log);
+          if (parsed && parsed.name === "OrderSubmitted") {
+            onchainOrderId = parsed.args.orderId;
+            break;
+          }
+        } catch (e) {
+          // not a vault event, skip
+        }
+      }
+    }
+    return { onchain: true, txHash: receipt?.hash, orderId: onchainOrderId };
   } catch (e) {
     console.error("On-chain submit failed:", e);
     return { onchain: false };
@@ -346,6 +361,20 @@ export const embeddedTee = {
   getMatches: () => matches,
   submitOnchain,
   attestOnchain,
+  updateOrderId: (commitment: string, onchainOrderId: string) => {
+    // Update the in-memory order record with the real on-chain orderId
+    // so matchRound uses the on-chain ID when calling attestMatch
+    for (const o of bids) {
+      if (o.commitment === commitment) {
+        o.bid_order_id = onchainOrderId;
+      }
+    }
+    for (const o of asks) {
+      if (o.commitment === commitment) {
+        o.ask_order_id = onchainOrderId;
+      }
+    }
+  },
   TEE_ADDRESS,
   TEE_MEASUREMENT,
   TEE_ID,
