@@ -16,46 +16,62 @@ contract Deploy is Script {
             teeMeasurement = keccak256("whisper-tee-image-v1");
         }
 
+        // Use startBroadcast(deployer) so constructor msg.sender == deployer.
         vm.startBroadcast(deployer);
 
-        // 1. Deploy mock FXRP (on real mainnet, use the canonical FAsset FXRP)
-        MockFXRP fxrp = new MockFXRP(msg.sender);
+        // 1) MockFXRP — owner is deployer
+        MockFXRP fxrp = new MockFXRP(deployer);
         console2.log("MockFXRP deployed at:", address(fxrp));
 
-        // 2. Deploy TEE verifier
-        WhisperVTPMVerifier tee = new WhisperVTPMVerifier(teeMeasurement, msg.sender);
+        // 2) WhisperVTPMVerifier — owner is deployer
+        WhisperVTPMVerifier tee = new WhisperVTPMVerifier(teeMeasurement, deployer);
         console2.log("WhisperVTPMVerifier deployed at:", address(tee));
 
-        // 3. Deploy vault
-        //    We pass address(0) for settle and overwrite it below; this is a
-        //    standard two-step deployment pattern to avoid a circular
-        //    constructor dependency between Vault and Settle.
+        // 3) WhisperVault — owner is deployer, settle is set to msg.sender
+        //    placeholder that we overwrite via setSettle() after WhisperSettle is deployed.
+        //    To avoid the constructor's ZeroAddress() check, we temporarily pass
+        //    deployer here and set the real settle below.
         WhisperVault vault = new WhisperVault(
             address(fxrp),
-            address(0),
+            address(0x1),  // dummy non-zero address to pass the ZeroAddress check
             address(tee),
             teeMeasurement,
-            msg.sender
+            deployer
         );
         console2.log("WhisperVault deployed at:", address(vault));
 
-        // 4. Deploy settle
-        WhisperSettle settle = new WhisperSettle(address(vault), msg.sender);
+        // 4) WhisperSettle — owner is deployer, vault is set after
+        WhisperSettle settle = new WhisperSettle(address(vault), deployer);
         console2.log("WhisperSettle deployed at:", address(settle));
 
-        // 5. Wire settle into vault
+        // 5) Wire settle into vault (replace the dummy)
         vault.setSettle(address(settle));
+
+        // 6) Register the demo TEE identity
+        bytes32 teeId = bytes32(0x2222222222222222222222222222222222222222222222222222222222222222);
+        address demoTee = 0x131E4A54aB221929834815c99195dAec316aC270;
+        tee.registerTEE(teeId, demoTee, teeMeasurement);
+        console2.log("Registered TEE:", demoTee);
+
+        // 7) Mint some mFXRP to the deployer for testing
+        fxrp.mint(deployer, 1_000_000 * 1e6);
+        console2.log("Minted 1M mFXRP to deployer");
 
         vm.stopBroadcast();
 
-        // 6. Save deployment addresses
+        // 8) Write deployment addresses
         string memory json = string.concat(
             "{\n",
             '  "fxrp": "', vm.toString(address(fxrp)), '",\n',
             '  "teeVerifier": "', vm.toString(address(tee)), '",\n',
             '  "vault": "', vm.toString(address(vault)), '",\n',
             '  "settle": "', vm.toString(address(settle)), '",\n',
-            '  "teeMeasurement": "', vm.toString(teeMeasurement), '"\n',
+            '  "teeMeasurement": "', vm.toString(teeMeasurement), '",\n',
+            '  "deployer": "', vm.toString(deployer), '",\n',
+            '  "network": "coston2",\n',
+            '  "chainId": 114,\n',
+            '  "rpc": "https://coston2-api.flare.network/ext/C/rpc",\n',
+            '  "explorer": "https://coston2-explorer.flare.network"\n',
             "}"
         );
         vm.writeFile("./deployments.json", json);
