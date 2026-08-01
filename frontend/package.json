@@ -20,12 +20,11 @@
     "clsx": "^2.1.1",
     "tailwindcss": "^3.4.0",
     "postcss": "^8.4.38",
-    "autoprefixer": "^10.4.19"
-  },
-  "devDependencies": {
+    "autoprefixer": "^10.4.19",
     "@types/node": "^20.12.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "typescript": "^5.4.0"
-  }
+  },
+  "devDependencies": {}
 }
