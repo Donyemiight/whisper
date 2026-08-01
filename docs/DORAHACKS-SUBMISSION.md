@@ -21,11 +21,11 @@
 | WhisperVTPMVerifier | `0x9FF9b136A7321EDDA152706df4458d69E7C9F3d9` | [View](https://coston2-explorer.flare.network/address/0x9FF9b136A7321EDDA152706df4458d69E7C9F3d9) |
 | MockFXRP | `0x4c765bac23F792b3954fEF6A8E22fb87634cEdCa` | [View](https://coston2-explorer.flare.network/address/0x4c765bac23F792b3954fEF6A8E22fb87634cEdCa) |
 
-**Live on-chain proof (test transactions):**
-- Bid order submitted: `0x5a6dd84e8a715589c71195aca226f5659b0a57c9eb3288a476fc4fe9f0dc20df` — [explorer](https://coston2-explorer.flare.network/tx/0x5a6dd84e8a715589c71195aca226f5659b0a57c9eb3288a476fc4fe9f0dc20df)
-- Ask order submitted: `0x937e4e981148e814c7c87203d80754917b55a432d98aadeb3042de4088e05068` — [explorer](https://coston2-explorer.flare.network/tx/0x937e4e981148e814c7c87203d80754917b55a432d98aadeb3042de4088e05068)
-- **Match attested (TEE-signed, verified on-chain):** `0x328375ae570e4ebfcfa12063688ba40ffbebb41f484048689e32c848f6d5873e` — [explorer](https://coston2-explorer.flare.network/tx/0x328375ae570e4ebfcfa12063688ba40ffbebb41f484048689e32c848f6d5873e)
-- Match details: bid `0x083cafdc...`, ask `0x058ab59d...`, 1,000 XRP @ $2.50, 1,000 mFXRP escrow
+**Live on-chain proof (test transactions, fresh as of submission):**
+- Bid order submitted: `0x2f3fe330aaa0955ab5584a243e81422dcfe6d0f5d5348659461a22e77d105f91` — [explorer](https://coston2-explorer.flare.network/tx/0x2f3fe330aaa0955ab5584a243e81422dcfe6d0f5d5348659461a22e77d105f91)
+- Ask order submitted: `0x69d032ede1868a7824f4e7482cad02f5d1b34603eb1e7dcfcd75fb7985ce6313` — [explorer](https://coston2-explorer.flare.network/tx/0x69d032ede1868a7824f4e7482cad02f5d1b34603eb1e7dcfcd75fb7985ce6313)
+- **Match attested (TEE-signed, verified on-chain):** `0xf1eedc7c02f8b2c90dbf151f99ca35a569a4fad3a3aa71b1c2d9cbb336f38c06` — [explorer](https://coston2-explorer.flare.network/tx/0xf1eedc7c02f8b2c90dbf151f99ca35a569a4fad3a3aa71b1c2d9cbb336f38c06)
+- Match details: bid `0x78cf6651...`, ask `0xb30f9ec7...`, 1,000 XRP @ $2.50, 2,500 mFXRP escrow
 
 ## What Whisper is
 
