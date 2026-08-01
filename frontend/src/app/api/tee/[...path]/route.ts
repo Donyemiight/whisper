@@ -70,16 +70,57 @@ async function handleEmbedded(path: string[], req: NextRequest): Promise<Respons
   if (req.method === "POST") {
     if (route === "match") {
       const matches = embeddedTee.matchRound();
+      // If on-chain, push each match to Coston2
+      if (embeddedTee.isLive()) {
+        for (const m of matches) {
+          const att = embeddedTee.attestation();
+          const attBytes =
+            att.tee_id + BigInt(att.nonce).toString(16).padStart(64, "0") + att.signature.slice(2);
+          const result = await embeddedTee.attestOnchain(
+            m.match_id,
+            m.bid_order_id,
+            m.ask_order_id,
+            m.xrp_amount,
+            m.xrp_price_micro_usd,
+            attBytes,
+          );
+          (m as any).onchain = result;
+        }
+      }
       return NextResponse.json(matches);
     }
     if (route === "demo" && sub === "submit") {
       const body = await req.json();
       if (body.side === "bid") {
         const out = embeddedTee.submitBid(body);
-        return NextResponse.json({ ok: true, ...out, ...body });
+        let onchain: any = { onchain: false };
+        if (embeddedTee.isLive() && process.env.RELAYER_KEY) {
+          onchain = await embeddedTee.submitOnchain(
+            "bid",
+            out.commitment,
+            0,
+            body.xrp_amount,
+            body.xrp_price_micro_usd,
+            body.expiry_unix,
+            body.xrpl_address || "",
+          );
+        }
+        return NextResponse.json({ ok: true, ...out, ...body, onchain });
       } else {
         const out = embeddedTee.submitAsk(body);
-        return NextResponse.json({ ok: true, ...out, ...body });
+        let onchain: any = { onchain: false };
+        if (embeddedTee.isLive() && process.env.RELAYER_KEY) {
+          onchain = await embeddedTee.submitOnchain(
+            "ask",
+            out.commitment,
+            body.escrow_amount,
+            body.xrp_amount,
+            body.xrp_price_micro_usd,
+            body.expiry_unix,
+            body.flare_address || "",
+          );
+        }
+        return NextResponse.json({ ok: true, ...out, ...body, onchain });
       }
     }
   }

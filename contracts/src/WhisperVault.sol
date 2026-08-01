@@ -126,11 +126,16 @@ contract WhisperVault is ReentrancyGuard, Ownable, Pausable {
         bytes32 _teeMeasurement,
         address _owner
     ) Ownable(_owner) {
-        if (_fxrp == address(0) || _settle == address(0) || _teeVerifier == address(0)) {
+        // _settle may be address(0) at deploy time and wired in afterwards
+        // via setSettle(). The other addresses must be valid.
+        if (_fxrp == address(0) || _teeVerifier == address(0)) {
             revert ZeroAddress();
         }
         fxrp = IERC20(_fxrp);
-        settle = IWhisperSettle(_settle);
+        // settle is intentionally not assigned when zero; setSettle() does it.
+        if (_settle != address(0)) {
+            settle = IWhisperSettle(_settle);
+        }
         teeVerifier = IWhisperVTPM(_teeVerifier);
         teeMeasurement = _teeMeasurement;
     }

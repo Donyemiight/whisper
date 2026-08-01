@@ -10,12 +10,13 @@ import {MockFXRP} from "../src/MockFXRP.sol";
 contract Deploy is Script {
     function run() external {
         uint256 pk = vm.envUint("PRIVATE_KEY");
+        address deployer = vm.addr(pk);
         bytes32 teeMeasurement = vm.envBytes32("TEE_IMAGE_MEASUREMENT");
         if (teeMeasurement == bytes32(0)) {
             teeMeasurement = keccak256("whisper-tee-image-v1");
         }
 
-        vm.startBroadcast(pk);
+        vm.startBroadcast(deployer);
 
         // 1. Deploy mock FXRP (on real mainnet, use the canonical FAsset FXRP)
         MockFXRP fxrp = new MockFXRP(msg.sender);
