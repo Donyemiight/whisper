@@ -18,11 +18,11 @@ The TEE matching engine is **embedded in the same Node process** as the frontend
 The TEE is currently running in **mock mode** (in-process, no on-chain Coston2 contracts). To switch to **live mode** with real on-chain addresses:
 
 1. Visit https://faucet.flare.network
-2. Paste: `0x4bd9580c0dd190f244faab5f866846d171d3e8d07b6cd2d088fb646f9990811e`
+2. Paste: `0x0b6A564E9dC664b9223FFDAe35dD585cfC010B12`
 3. Claim C2FLR on Coston2 (100 C2FLR + 10 FXRP + 10 USDT0)
 4. Run from the repo root:
    ```bash
-   PRIVATE_KEY=0x4bd9580c0dd190f244faab5f866846d171d3e8d07b6cd2d088fb646f9990811e \
+   PRIVATE_KEY=0x0b6A564E9dC664b9223FFDAe35dD585cfC010B12 \
      bash scripts/deploy.sh
    ```
 5. Add the deployed addresses to Render as env vars:
